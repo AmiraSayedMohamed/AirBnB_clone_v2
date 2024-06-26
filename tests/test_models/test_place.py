@@ -1,67 +1,100 @@
 #!/usr/bin/python3
-"""Unit tests for the Place model."""
+""" """
 import os
-from models.place import Place
+
 from tests.test_models.test_base_model import TestBasemodel
+from models.place import Place
 
 
 class TestPlace(TestBasemodel):
     """Represents the tests for the Place model."""
-
     def __init__(self, *args, **kwargs):
         """Initializes the test class."""
         super().__init__(*args, **kwargs)
         self.name = "Place"
         self.value = Place
 
-    def _test_attribute_type(self, attribute_name, expected_type):
-        """Tests the type of a given attribute."""
-        new = self.value()
-        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-            expected_type = type(None)
-        self.assertEqual(type(getattr(new, attribute_name)), expected_type)
-
     def test_city_id(self):
         """Tests the type of city_id."""
-        self._test_attribute_type('city_id', str)
+        new = self.value()
+        self.assertEqual(
+            type(new.city_id),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_user_id(self):
         """Tests the type of user_id."""
-        self._test_attribute_type('user_id', str)
+        new = self.value()
+        self.assertEqual(
+            type(new.user_id),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_name(self):
         """Tests the type of name."""
-        self._test_attribute_type('name', str)
+        new = self.value()
+        self.assertEqual(
+            type(new.name),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_description(self):
         """Tests the type of description."""
-        self._test_attribute_type('description', str)
+        new = self.value()
+        self.assertEqual(
+            type(new.description),
+            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_number_rooms(self):
         """Tests the type of number_rooms."""
-        self._test_attribute_type('number_rooms', int)
+        new = self.value()
+        self.assertEqual(
+            type(new.number_rooms),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_number_bathrooms(self):
         """Tests the type of number_bathrooms."""
-        self._test_attribute_type('number_bathrooms', int)
+        new = self.value()
+        self.assertEqual(
+            type(new.number_bathrooms),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_max_guest(self):
         """Tests the type of max_guest."""
-        self._test_attribute_type('max_guest', int)
+        new = self.value()
+        self.assertEqual(
+            type(new.max_guest),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_price_by_night(self):
         """Tests the type of price_by_night."""
-        self._test_attribute_type('price_by_night', int)
+        new = self.value()
+        self.assertEqual(
+            type(new.price_by_night),
+            int if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_latitude(self):
         """Tests the type of latitude."""
-        self._test_attribute_type('latitude', float)
+        new = self.value()
+        self.assertEqual(
+            type(new.latitude),
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_longitude(self):
         """Tests the type of longitude."""
-        self._test_attribute_type('longitude', float)
+        new = self.value()
+        self.assertEqual(
+            type(new.longitude),
+            float if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
+        )
 
     def test_amenity_ids(self):
         """Tests the type of amenity_ids."""
-        self._test_attribute_type('amenity_ids', list)
-
+        new = self.value()
+        self.assertEqual(type(new.amenity_ids), list)
