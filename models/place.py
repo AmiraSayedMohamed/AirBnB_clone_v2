@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-"""Place Module for HBNB project"""
-
+""" Place Module for HBNB project """
 import os
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
+
 from models.base_model import BaseModel, Base
 from models.review import Review
 from models.amenity import Amenity
@@ -12,8 +12,20 @@ from models.amenity import Amenity
 place_amenity = Table(
     'place_amenity',
     Base.metadata,
-    Column('place_id', String(60), ForeignKey('places.id'), nullable=False, primary_key=True),
-    Column('amenity_id', String(60), ForeignKey('amenities.id'), nullable=False, primary_key=True)
+    Column(
+        'place_id',
+        String(60),
+        ForeignKey('places.id'),
+        nullable=False,
+        primary_key=True
+    ),
+    Column(
+        'amenity_id',
+        String(60),
+        ForeignKey('amenities.id'),
+        nullable=False,
+        primary_key=True
+    )
 )
 """Represents the many to many relationship table
 between Place and Amenity records.
@@ -21,27 +33,51 @@ between Place and Amenity records.
 
 
 class Place(BaseModel, Base):
-    """A place to stay"""
+    """ A place to stay """
     __tablename__ = 'places'
-
-    # Define attributes based on storage type
-    city_id = Column(String(60), ForeignKey('cities.id'), nullable=False) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
-    name = Column(String(128), nullable=False) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
-    description = Column(String(1024), nullable=True) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
-    number_rooms = Column(Integer, nullable=False, default=0) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
-    number_bathrooms = Column(Integer, nullable=False, default=0) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
-    max_guest = Column(Integer, nullable=False, default=0) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
-    price_by_night = Column(Integer, nullable=False, default=0) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
-    latitude = Column(Float, nullable=True) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0.0
-    longitude = Column(Float, nullable=True) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0.0
+    city_id = Column(
+        String(60), ForeignKey('cities.id'), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    user_id = Column(
+        String(60), ForeignKey('users.id'), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    name = Column(
+        String(128), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    description = Column(
+        String(1024), nullable=True
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    number_rooms = Column(
+        Integer, nullable=False, default=0
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
+    number_bathrooms = Column(
+        Integer, nullable=False, default=0
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
+    max_guest = Column(
+        Integer, nullable=False, default=0
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
+    price_by_night = Column(
+        Integer, nullable=False, default=0
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0
+    latitude = Column(
+        Float, nullable=True
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0.0
+    longitude = Column(
+        Float, nullable=True
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0.0
     amenity_ids = []
-
-    # Define relationships based on storage type
-    reviews = relationship('Review', cascade="all, delete, delete-orphan", backref='place') if os.getenv('HBNB_TYPE_STORAGE') == 'db' else None
-
+    reviews = relationship(
+        'Review',
+        cascade="all, delete, delete-orphan",
+        backref='place'
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else None
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False, backref='place_amenities')
+        amenities = relationship(
+            'Amenity',
+            secondary=place_amenity,
+            viewonly=False,
+            backref='place_amenities'
+        )
     else:
         @property
         def amenities(self):
@@ -56,7 +92,7 @@ class Place(BaseModel, Base):
         @amenities.setter
         def amenities(self, value):
             """Adds an amenity to this Place"""
-            if isinstance(value, Amenity):
+            if type(value) is Amenity:
                 if value.id not in self.amenity_ids:
                     self.amenity_ids.append(value.id)
 
@@ -69,4 +105,3 @@ class Place(BaseModel, Base):
                 if value.place_id == self.id:
                     reviews_of_place.append(value)
             return reviews_of_place
-

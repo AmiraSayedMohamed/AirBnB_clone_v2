@@ -1,25 +1,26 @@
 #!/usr/bin/python3
-"""State Module for HBNB project"""
-
+""" State Module for HBNB project """
 import os
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+
 from models.base_model import BaseModel, Base
 from models.city import City
 
 
 class State(BaseModel, Base):
-    """State class"""
+    """ State class """
     __tablename__ = 'states'
-
-    # Define attributes based on storage type
-    name = Column(String(128), nullable=False) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
-
+    name = Column(
+        String(128), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        # Define relationship using SQLAlchemy ORM for database storage
-        cities = relationship('City', cascade='all, delete, delete-orphan', backref='state')
+        cities = relationship(
+            'City',
+            cascade='all, delete, delete-orphan',
+            backref='state'
+        )
     else:
-        # Define a property for non-database storage to fetch cities associated with this state
         @property
         def cities(self):
             """Returns the cities in this State"""
@@ -29,4 +30,3 @@ class State(BaseModel, Base):
                 if value.state_id == self.id:
                     cities_in_state.append(value)
             return cities_in_state
-

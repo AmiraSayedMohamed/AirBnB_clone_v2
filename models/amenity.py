@@ -1,8 +1,15 @@
-from models.base_model import BaseModel
+#!/usr/bin/python3
+""" Amenity Module for HBNB project """
+import os
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
-class Amenity(BaseModel):
-    name = str
+from models.base_model import BaseModel, Base
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
+class Amenity(BaseModel, Base):
+    """Represents an amenity data set."""
+    __tablename__ = 'amenities'
+    name = Column(
+        String(128), nullable=False
+    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
