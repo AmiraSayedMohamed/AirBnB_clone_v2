@@ -11,15 +11,13 @@ from models.city import City
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
-    name = Column(
-        String(128), nullable=False
-    ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+    
+    # Conditional column definition based on storage type
+    name = Column(String(128), nullable=False) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else ''
+
+    # Conditional property or relationship definition based on storage type
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        cities = relationship(
-            'City',
-            cascade='all, delete, delete-orphan',
-            backref='state'
-        )
+        cities = relationship('City', cascade='all, delete, delete-orphan', backref='state')
     else:
         @property
         def cities(self):
@@ -30,3 +28,4 @@ class State(BaseModel, Base):
                 if value.state_id == self.id:
                     cities_in_state.append(value)
             return cities_in_state
+
