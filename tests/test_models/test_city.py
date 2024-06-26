@@ -1,31 +1,19 @@
 #!/usr/bin/python3
-""" """
-import os
+"""Unittest module for the City class"""
 
+import unittest
 from models.city import City
-from tests.test_models.test_base_model import TestBasemodel
 
+class TestCity(unittest.TestCase):
+    """Test cases for the City class"""
 
-class TestCity(TestBasemodel):
-    """Represents the tests for the City model."""
-    def __init__(self, *args, **kwargs):
-        """Initializes the test class."""
-        super().__init__(*args, **kwargs)
-        self.name = "City"
-        self.value = City
+    def test_instance_creation(self):
+        """Test if an instance is correctly created"""
+        instance = City()
+        self.assertIsInstance(instance, City)
+        self.assertEqual(instance.name, '')
+        self.assertEqual(instance.state_id, '')
 
-    def test_state_id(self):
-        """Tests the type of state_id."""
-        new = self.value()
-        self.assertEqual(
-            type(new.state_id),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
-        )
+if __name__ == "__main__":
+    unittest.main()
 
-    def test_name(self):
-        """Tests the type of name."""
-        new = self.value()
-        self.assertEqual(
-            type(new.name),
-            str if os.getenv('HBNB_TYPE_STORAGE') != 'db' else type(None)
-        )
