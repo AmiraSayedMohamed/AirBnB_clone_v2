@@ -22,13 +22,13 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
-    class_dict = {
+    classes = {
         'BaseModel': BaseModel, 'User': User, 'Place': Place,
         'State': State, 'City': City, 'Amenity': Amenity,
         'Review': Review
     }
-    command_list = ['all', 'count', 'show', 'destroy', 'update']
-    type_map = {
+    dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
+    types = {
         'number_rooms': int, 'number_bathrooms': int,
         'max_guest': int, 'price_by_night': int,
         'latitude': float, 'longitude': float
@@ -46,7 +46,7 @@ class HBNBCommand(cmd.Cmd):
                 cls_cmd, remainder = line.split('.', 1)
                 cmd_name, args = remainder.split('(', 1)
                 args = args.strip(')')
-                if cls_cmd in self.class_dict and cmd_name in self.command_list:
+                if cls_cmd in self.classes and cmd_name in self.dot_cmds:
                     cmd_str = f"{cmd_name} {cls_cmd} {args}"
                     return cmd_str
             except Exception:
@@ -87,7 +87,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         cls_name = args[0]
-        if cls_name not in self.class_dict:
+        if cls_name not in self.classes:
             print("** class doesn't exist **")
             return
 
@@ -105,9 +105,9 @@ class HBNBCommand(cmd.Cmd):
             if 'updated_at' not in attributes:
                 attributes['updated_at'] = str(datetime.now())
 
-            new_instance = self.class_dict[cls_name](**attributes)
+            new_instance = self.classes[cls_name](**attributes)
         else:
-            new_instance = self.class_dict[cls_name]()
+            new_instance = self.classes[cls_name]()
             for key, value in attributes.items():
                 if key not in ('id', 'created_at', 'updated_at', '__class__'):
                     setattr(new_instance, key, value)
@@ -128,7 +128,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         cls_name = args[0]
-        if cls_name not in self.class_dict:
+        if cls_name not in self.classes:
             print("** class doesn't exist **")
             return
 
@@ -157,7 +157,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         cls_name = args[0]
-        if cls_name not in self.class_dict:
+        if cls_name not in self.classes:
             print("** class doesn't exist **")
             return
 
@@ -184,7 +184,7 @@ class HBNBCommand(cmd.Cmd):
         objects = storage.all()
         if args:
             cls_name = args[0]
-            if cls_name not in self.class_dict:
+            if cls_name not in self.classes:
                 print("** class doesn't exist **")
                 return
             instances = [str(obj) for key, obj in objects.items() if key.startswith(cls_name)]
@@ -200,7 +200,7 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, arg):
         """Count the number of instances of a class"""
         cls_name = arg.split()[0] if arg else None
-        if cls_name in self.class_dict:
+        if cls_name in self.classes:
             count = sum(1 for key in storage.all() if key.startswith(cls_name))
             print(count)
         else:
@@ -218,7 +218,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         cls_name = args[0]
-        if cls_name not in self.class_dict:
+        if cls_name not in self.classes:
             print("** class doesn't exist **")
             return
 
