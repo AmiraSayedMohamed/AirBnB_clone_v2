@@ -6,10 +6,10 @@ from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel, Base
 
+
 class User(BaseModel, Base):
     """This class defines a user by various attributes"""
     __tablename__ = 'users'
-
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
@@ -22,6 +22,4 @@ class User(BaseModel, Base):
         password = ''
         first_name = ''
         last_name = ''
-        places = None
-        reviews = None
 
