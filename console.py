@@ -30,7 +30,7 @@ class HBNBCommand(cmd.Cmd):
         """ Method to exit the HBNB console"""
         exit(0)
 
-    def help_quit(self):
+    def help_quit(self, command):
         """ Prints the help documentation for quit """
         print("Exits the program with formatting\n")
 
@@ -38,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
         """ Handles EOF to exit program """
         exit(0)
 
-    def help_EOF(self):
+    def help_EOF(self, arg):
         """ Prints the help documentation for EOF """
         print("Exits the program without formatting\n")
 
@@ -60,14 +60,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
-        # Extract arguments (if any)
-        args = args.split(maxsplit=1)[1] if ' ' in args else ''
-
-        # Create the object with appropriate arguments
+        # Extract arguments (if any) using a dictionary comprehension
         try:
             new_instance = self.classes[class_name]()
-            # Use dictionary comprehension for flexible attribute handling
-            new_instance.__dict__ = {key: value for key, value in parse_args(args)}
+            new_instance.__dict__ = {key: value for key, value in parse_args(args[1:])}
             new_instance.save()
             print(f"{class_name} created: {new_instance.id}")
         except ValueError as e:
@@ -124,4 +120,9 @@ class HBNBCommand(cmd.Cmd):
         # Count objects matching the class name (if provided)
         count = sum(1 for obj in storage.all().values() if not args or obj.__class__.__name__ == args)
         print(count)
+
+    def do_update(self, args):
+        """ Updates a certain object with new info """
+
+        
 
