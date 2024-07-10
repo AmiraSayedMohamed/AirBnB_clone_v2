@@ -1,4 +1,5 @@
 import cmd
+from models.engine.file_storage import file_storage
 from models import storage
 from models.base_model import BaseModel
 from models.state import State
